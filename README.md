@@ -204,7 +204,7 @@ python src/main.py --provider <ai_provider> --data-source <data_source> --export
   - `nvd`: Usa o National Vulnerability Database (NVD).
   - `vulners`: Usa a API do Vulners.
   - `....`: Como a ferramenta é extensível é possível adicionar vários fontes de dados.
-  - `both`: Usa _ambas_ as fontes (NVD e Vulners).
+  - `both`: Usa _ambas_ as fontes (NVD, Vulners, CISA e CIRCL).
 - `--export-format`: Formato de exportação dos dados. Opções:
   - `csv`: Arquivo CSV (Comma-Separated Values).
   - `json`: Arquivo JSON.
