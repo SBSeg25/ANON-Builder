@@ -71,7 +71,7 @@ Este README.md está organizado nas seguintes seções:
 
 ## Dependências
 
-- Python 3.8 ou superior.
+- Python 3.10 ou superior.
 - Chaves de API para os seguintes serviços (opcional, dependendo dos módulos e LLMs que você for usar):
   - **Vulners:** Obtenha uma chave em [https://vulners.com/](https://vulners.com/)
   - **HugginFace:** Obtenha uma chave em [https://huggingface.co](https://huggingface.co/)
@@ -90,7 +90,7 @@ Para executar a ferramenta ANON-Builder, é necessário atender aos seguintes re
 Ao executar este artefato, considere os seguintes pontos:
 
 - **Chaves de API:** Não exponha suas chaves de API. Armazene-as de forma segura no arquivo `src/config.yaml` (conforme instruído) e **não versione este arquivo com suas chaves em repositórios públicos**. O arquivo `.gitignore` já está configurado para ignorar `config.yaml` por padrão.
-- **Recursos Externos:** A ferramenta interage com APIs externas. Esteja ciente das políticas de privacidade e uso de dados de cada serviço (NVD, Vulners, Google AI, DeepSeek, HuggingFace, OpenAI).
+- **Recursos Externos:** A ferramenta interage com APIs externas. Esteja ciente das políticas de privacidade e uso de dados de cada serviço (NVD, Vulners, CiSA, CIRCL, Google AI, LLaMA, HuggingFace, OpenAI).
 - **Execução de Código:** Scripts automatizados podem consumir recursos (CPU, memória, rede). Erros no código ou configurações inadequadas podem levar a consumo excessivo.
 - **Ambiente Isolado:** É **altamente recomendável** executar a ferramenta em um ambiente isolado, como um ambiente virtual Python (venv) ou um contêiner Docker, para evitar conflitos de dependência e potenciais problemas de segurança.
 
