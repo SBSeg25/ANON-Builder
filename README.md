@@ -34,6 +34,8 @@ Este README.md está organizado nas seguintes seções:
 - **Coleta de Dados:** Busca dados de vulnerabilidades em múltiplas fontes:
   - NVD (National Vulnerability Database)
   - Vulners
+  - CiRCL
+  - CISA
   - GitHub (através de uma API, _implementação futura_)
 - **Processamento de Dados:**
   - Normalização e limpeza dos dados.
