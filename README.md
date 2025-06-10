@@ -175,8 +175,7 @@ CMD ["python", "src/main.py"]
 4.  **Executar o container sem usar IA para categorização:**
 
     ```bash
-  python src/main.py --provider 'none' --data-source 'nvd' --export-format 'csv' --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"
-    ```
+    python src/main.py --provider 'none' --data-source 'nvd' --export-format 'csv' --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"```
 
 ## Configuração
 
