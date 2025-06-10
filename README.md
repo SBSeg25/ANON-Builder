@@ -10,6 +10,8 @@ _A obtenção e geração de datasets significativos e representativos permanece
 
 ## Demonstração do uso da ferramenta ANON-Builder
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/r-j7d5C9ANI/0.jpg)](https://www.youtube.com/embed/r-j7d5C9ANI?si=kWUIhntKpBxDZ2D4)
+
 ## Estrutura do README.md
 
 Este README.md está organizado nas seguintes seções:
