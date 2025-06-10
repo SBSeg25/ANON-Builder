@@ -169,9 +169,9 @@ CMD ["python", "src/main.py"]
 
 2.  **Executar o container usando IA para categorização:**
     _(Este exemplo assume que o modelo Llama4 e a configuração estão dentro da imagem ou acessíveis. Para modelos locais grandes ou para usar um `config.yaml` externo, pode ser necessário montar volumes (`-v`).)_
-    `bash
+    ```bash
 python src/main.py --provider --data-source nvd --export-format csv --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"
-`
+```
 
 3.  **Executar o container sem usar IA para categorização:**
 
