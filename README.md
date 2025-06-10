@@ -169,13 +169,17 @@ CMD ["python", "src/main.py"]
 
 2.  **Executar o container usando IA para categorização:**
     _(Este exemplo assume que o modelo Llama4 e a configuração estão dentro da imagem ou acessíveis. Para modelos locais grandes ou para usar um `config.yaml` externo, pode ser necessário montar volumes (`-v`).)_
-    ```bash
+
+    ````bash
     python src/main.py --provider --data-source nvd --export-format csv --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"```
 
-4.  **Executar o container sem usar IA para categorização:**
+    ````
+
+3.  **Executar o container sem usar IA para categorização:**
 
     ```bash
-    python src/main.py --provider 'none' --data-source 'nvd' --export-format 'csv' --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"```
+    python src/main.py --provider 'none' --data-source 'nvd' --export-format 'csv' --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"
+    ```
 
 ## Configuração
 
@@ -276,79 +280,244 @@ Ao copiar e colar as chaves de API (por exemplo, do Apêndice do artigo ou de ou
 
 **Execução por Reivindicação (Claim):**
 
-_(Nota: Os nomes dos arquivos de saída gerados podem variar ligeiramente dependendo da implementação exata do script. Os nomes abaixo são exemplos baseados no apêndice. Adapte conforme necessário.)_
+_(Nota: Os nomes dos arquivos de saída gerados podem variar ligeiramente dependendo da implementação exata do script. Adapte conforme necessário.)_
 
-**Reivindicação #1: Coleta e Categorização de Vulnerabilidades em DDS**
+**Reivindicação #1: Geração dos Datasets e categorização usando Gemini 2.0 Flash**
 
-- **Objetivo:** Coletar dados de DDS, categorizar com Gemini e Llama4.
+- **Objetivo:** Gerar datasets correspondentes a um protocolo ou tecnologia específica: Apache, QUIC, OpenSSL, NGINX, Kubernetes, MQTT, Zigbee e CoAP de múltiplas fontes (NVD, CIRCL, CISA e Vulners) e categorizar usando Gemini 2.0 Flash.
+
 - **Comandos:**
-  - **Gemini (NVD):**
-    ```bash
-    python src/main.py --provider 'google' --data-source 'nvd' --search-file search_files/search_params_DDS.txt --export-format csv --output-file google_dataset/DDS_vulnerabilities_categorized-NVD-GEMINI-API.csv
-    ```
-  - **Llama4 (NVD):**
-    ```bash
-    python src/main.py --provider 'Llama4' --data-source 'nvd' --search-file search_files/search_params_DDS.txt --export-format csv --output-file Llama4_dataset/DDS_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-    ```
-- **Verificação:** Verifique se os arquivos CSV foram criados nos diretórios `google_dataset/` e `Llama4_dataset/`. Abra os arquivos e inspecione as colunas (ID, descrição, colunas de categorização como CWE, etc.). Compare os resultados gerais (tipos de CWEs, fornecedores) com as tabelas/gráficos do artigo, lembrando da natureza estocástica dos LLMs.
 
-**Reivindicação #2: Análise de Protocolos de Roteamento em UAVs**
+- **Todos:** É possível gerar um arquivo contendo as vulnerabilidades agrupadas de todas as protocolo ou tecnologia e categorizar de formar simples. Cada vulnerabilidade é identificada com um rótulo contendo qual tecnologia ou protocolo foi a origem.
 
-- **Objetivo:** Coletar dados de protocolos de roteamento UAV, categorizar com Gemini e Llama4.
+  ```bash
+  python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'QUIC' 'Apache' 'NGINX' 'OpenSSL' 'Kubernets' 'MQTT' 'CoAP' 'Zigbee' --export-format csv --output-file dataset_categorized-GEMINI-API.csv
+  ```
+
+  - **Apache:**
+
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'Apache' --export-format csv --output-file apache_dataset_categorized-GEMINI-API.csv
+    ```
+
+  - **QUIC:**
+
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'QUIC' --export-format csv --output-file quic_dataset_categorized-GEMINI-API.csv
+    ```
+
+  - **OpenSSL:**
+
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'OpenSSL' --export-format csv --output-file openssl_dataset_categorized-GEMINI-API.csv
+    ```
+
+  - **NGINX:**
+
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'NGINX' --export-format csv --output-file nginx_dataset_categorized-GEMINI-API.csv
+    ```
+
+  - **Kubernetes:**
+
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'Kubernetes' --export-format csv --output-file kubernetes_dataset_categorized-GEMINI-API.csv
+    ```
+
+  - **MQTT:**
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'MQTT' --export-format csv --output-file mqtt_dataset_categorized-GEMINI-API.csv
+    ```
+  - **Zigbee:**
+
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'Zigbee' --export-format csv --output-file zigbee_dataset_categorized-GEMINI-API.csv
+    ```
+
+  - **CoAP:**
+    ```bash
+    python src/main.py --provider 'gemini2flash' --data-source 'both' --search-params 'CoAP' --export-format csv --output-file coap_dataset_categorized-GEMINI-API.csv
+    ```
+
+- **Verificação:** Verifique se os arquivos CSV foram criados nos diretórios corretos `gemini2flash_dataset/`. Abra os arquivos e inspecione as colunas (ID, descrição, colunas de categorização como CWE, etc.). Compare os resultados gerais (tipos de CWEs, fornecedores) com as tabelas/gráficos do artigo, lembrando da natureza estocástica dos LLMs.
+
+**Reivindicação #2: Geração dos Datasets e categorização usando GPT-4o mini**
+
+- **Objetivo:** Gerar datasets correspondentes a um protocolo ou tecnologia específica: Apache, QUIC, OpenSSL, NGINX, Kubernetes, MQTT, Zigbee e CoAP de múltiplas fontes (NVD, CIRCL, CISA e Vulners) e categorizar usando GPT-4o mini.
+
 - **Comandos:**
-  - **Gemini (NVD):**
-    ```bash
-    python src/main.py --provider 'google' --data-source 'nvd' --search-file search_files/search_params_UAV.txt --export-format csv --output-file google_dataset/UAV_vulnerabilities_categorized-GEMINI-API.csv
-    ```
-  - **Llama4 (NVD):**
-    ```bash
-    python src/main.py --provider 'Llama4' --data-source 'nvd' --search-file search_files/search_params_UAV.txt --export-format csv --output-file Llama4_dataset/UAV_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-    ```
+
+- **Todos:** É possível gerar um arquivo contendo as vulnerabilidades agrupadas de todas as protocolo ou tecnologia e categorizar de formar simples. Cada vulnerabilidade é identificada com um rótulo contendo qual tecnologia ou protocolo foi a origem.
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'QUIC' 'Apache' 'NGINX' 'OpenSSL' 'Kubernets' 'MQTT' 'CoAP' 'Zigbee' --export-format csv --output-file dataset_categorized-LLaMA4-API.csv
+  ```
+
+- **Apache:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'Apache' --export-format csv --output-file apache_dataset_categorized-GPT4-API.csv
+  ```
+
+- **QUIC:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'QUIC' --export-format csv --output-file quic_dataset_categorized-GPT4-API.csv
+  ```
+
+- **OpenSSL:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'OpenSSL' --export-format csv --output-file openssl_dataset_categorized-GPT4-API.csv
+  ```
+
+- **NGINX:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'NGINX' --export-format csv --output-file nginx_dataset_categorized-GPT4-API.csv
+  ```
+
+- **Kubernetes:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'Kubernetes' --export-format csv --output-file kubernetes_dataset_categorized-GPT4-API.csv
+  ```
+
+- **MQTT:**
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'MQTT' --export-format csv --output-file mqtt_dataset_categorized-GPT4-API.csv
+  ```
+- **Zigbee:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'Zigbee' --export-format csv --output-file zigbee_dataset_categorized-GPT4-API.csv
+  ```
+
+- **CoAP:**
+
+  ```bash
+  python src/main.py --provider 'openai40mini' --data-source 'both' --search-params 'CoAP' --export-format csv --output-file coap_dataset_categorized-GPT4-API.csv
+  ```
+
 - **Verificação:** Similar à Reivindicação #1, verificando os arquivos CSV nos diretórios correspondentes.
 
-**Reivindicação #3: Estudo de Caso MQTT**
+**Reivindicação #3: Geração dos Datasets e categorização usando LLaMA4**
 
-- **Objetivo:** Coletar dados de MQTT (NVD e Vulners), categorizar com Gemini, Llama4 e DeepSeek.
+- **Objetivo:** Gerar datasets correspondentes a um protocolo ou tecnologia específica: Apache, QUIC, OpenSSL, NGINX, Kubernetes, MQTT, Zigbee e CoAP de múltiplas fontes (NVD, CIRCL, CISA e Vulners) e categorizar usando LLaMA4.
+
 - **Comandos:**
-  - **Gemini (NVD):**
+
+  - **Todos:** É possível gerar um arquivo contendo as vulnerabilidades agrupadas de todas as protocolo ou tecnologia e categorizar de formar simples. Cada vulnerabilidade é identificada com um rótulo contendo qual tecnologia ou protocolo foi a origem.
+
     ```bash
-    python src/main.py --provider 'google' --data-source 'nvd' --search-file search_files/search_params_MQTT.txt --export-format csv --output-file google_dataset/MQTT_vulnerabilities_categorized-NVD-GEMINI-API.csv
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'QUIC' 'Apache' 'NGINX' 'OpenSSL' 'Kubernets' 'MQTT' 'CoAP' 'Zigbee' --export-format csv --output-file dataset_categorized-LLaMA4-API.csv
     ```
-  - **Gemini (Vulners):**
+
+  - **Apache:**
+
     ```bash
-    python src/main.py --provider 'google' --data-source 'vulners' --search-file search_files/search_params_MQTT.txt --export-format csv --output-file google_dataset/MQTT_vulnerabilities_categorized-VULNERS-GEMINI-API.csv
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'Apache' --export-format csv --output-file apache_dataset_categorized-LLaMA4-API.csv
     ```
-  - **Llama4 (NVD):**
+
+  - **QUIC:**
+
     ```bash
-    python src/main.py --provider 'Llama4' --data-source 'nvd' --search-file search_files/search_params_MQTT.txt --export-format csv --output-file Llama4_dataset/MQTT_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'QUIC' --export-format csv --output-file quic_dataset_categorized-LLaMA4-API.csv
     ```
-  - **Llama4 (Vulners):**
+
+  - **OpenSSL:**
+
     ```bash
-    python src/main.py --provider 'Llama4' --data-source 'vulners' --search-file search_files/search_params_MQTT.txt --export-format csv --output-file Llama4_dataset/MQTT_vulnerabilities_categorized-VULNERS-Llama4-LOCAL.csv
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'OpenSSL' --export-format csv --output-file openssl_dataset_categorized-LLaMA4-API.csv
     ```
-  - **DeepSeek (NVD):**
+
+  - **NGINX:**
+
     ```bash
-    python src/main.py --provider 'deepseek' --data-source 'nvd' --search-file search_files/search_params_MQTT.txt --export-format csv --output-file deepseek_dataset/MQTT_vulnerabilities_categorized-NVD-DEEPSEEK.csv
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'NGINX' --export-format csv --output-file nginx_dataset_categorized-LLaMA4-API.csv
     ```
-  - **DeepSeek (Vulners):**
+
+  - **Kubernetes:**
+
     ```bash
-    python src/main.py --provider 'deepseek' --data-source 'vulners' --search-file search_files/search_params_MQTT.txt --export-format csv --output-file deepseek_dataset/MQTT_vulnerabilities_categorized-VULNERS-DEEPSEEK.csv
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'Kubernetes' --export-format csv --output-file kubernetes_dataset_categorized-LLaMA4-API.csv
     ```
+
+  - **MQTT:**
+
+    ```bash
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'MQTT' --export-format csv --output-file mqtt_dataset_categorized-LLaMA4-API.csv
+    ```
+
+  - **Zigbee:**
+
+    ```bash
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'Zigbee' --export-format csv --output-file zigbee_dataset_categorized-LLaMA4-API.csv
+    ```
+
+  - **CoAP:**
+    ```bash
+    python src/main.py --provider 'llama4' --data-source 'both' --search-params 'CoAP' --export-format csv --output-file coap_dataset_categorized-LLaMA4-API.csv
+    ```
+
+**Reivindicação #4: Geração dos Datasets de Baseline com fonte de dados NVD e sem categorização**
+
+- **Objetivo:** Gerar datasets correspondentes a um protocolo ou tecnologia específica: Apache, QUIC, OpenSSL, NGINX, Kubernetes, MQTT, Zigbee e CoAP de múltiplas fontes (NVD, CIRCL, CISA e Vulners) e categorizar usando LLaMA4.
+
+- **Comandos:**
+
+- **Todos:** É possível gerar um arquivo contendo as vulnerabilidades agrupadas de todas as protocolo ou tecnologia e categorizar de formar simples. Cada vulnerabilidade é identificada com um rótulo contendo qual tecnologia ou protocolo foi a origem.
+
+  ```bash
+  python src/main.py --provider 'none' --data-source 'nvd' --search-params 'QUIC' 'Apache' 'NGINX' 'OpenSSL' 'Kubernets' 'MQTT' 'CoAP' 'Zigbee' --export-format csv --output-file dataset_NO-CATEGORIZED.csv
+  ```
+
+  - **Apache:**
+
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'Apache' --export-format csv --output-file apache_dataset_NO-CATEGORIZED.csv
+    ```
+
+  - **QUIC:**
+
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'QUIC' --export-format csv --output-file quic_dataset_NO-CATEGORIZED.csv
+    ```
+
+  - **QUIC:**
+
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'OpenSSL' --export-format csv --output-file openssl_dataset_NO-CATEGORIZED.csv
+    ```
+
+  - **QUIC:**
+
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'NGINX' --export-format csv --output-file nginx_dataset_NO-CATEGORIZED.csv
+    ```
+
+  - **QUIC:**
+
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'Kubernetes' --export-format csv --output-file kubernetes_dataset_NO-CATEGORIZED.csv
+    ```
+
+  - **QUIC:**
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'MQTT' --export-format csv --output-file mqtt_dataset_NO-CATEGORIZED.csv
+    ```
+  - **QUIC:**
+
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'Zigbee' --export-format csv --output-file zigbee_dataset_NO-CATEGORIZED.csv
+    ```
+
+  - **QUIC:**
+    ```bash
+    python src/main.py --provider 'none' --data-source 'nvd' --search-params 'CoAP' --export-format csv --output-file coap_dataset_NO-CATEGORIZED.csv
+    ```
+
 - **Verificação:** Similar às anteriores, verificando os múltiplos arquivos gerados.
-
-**Reivindicação #4: Estudo de Caso Navegadores Web**
-
-- **Objetivo:** Coletar dados de Navegadores Web (NVD), categorizar com Gemini e Llama4.
-- **Comandos:**
-  - **Gemini (NVD):**
-    ```bash
-    python src/main.py --provider 'google' --data-source 'nvd' --search-file search_files/search_params_BROWSERS.txt --export-format csv --output-file google_dataset/BROWSERS_vulnerabilities_categorized-NVD-GEMINI-API.csv
-    ```
-  - **Llama4 (NVD):**
-    ```bash
-    python src/main.py --provider 'Llama4' --data-source 'nvd' --search-file search_files/search_params_BROWSERS.txt --export-format csv --output-file Llama4_dataset/BROWSERS_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-    ```
-- **Verificação:** Similar às anteriores.
 
 **Geração da análise dos resultados**
 
@@ -356,31 +525,27 @@ Para reproduzir os dados apresentados no trabalho com base nos datasets gerados 
 
 - **Estrutura de Arquivos**: O script `analysis.py` deve estar localizado no mesmo diretório onde os datasets estão armazenados ou no diretório raiz do projeto.
 
-Após gerar os datasets eles vão estár disponíveis para a geração dos resultados:
+Após gerar os datasets eles vão estár disponíveis para a geração dos resultados nos respectivos diretórios. Por exemplo:
 
-BROWSERS Vulnerabilities:
+Gemini 2.0 Flash Vulnerabilities:
 
-- BROWSERS_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-- BROWSERS_vulnerabilities_categorized-NVD-GEMINI-API.csv
+- gemini2flash_dataset/dataset_categorized-GEMINI-API.csv
+- gemini2flash_dataset/\*.csv
 
-MQTT Vulnerabilities:
+GPT-4o mini Vulnerabilities:
 
-- MQTT_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-- MQTT_vulnerabilities_categorized-NVD-GEMINI-API.csv
-- MQTT_vulnerabilities_categorized-VULNERS-Llama4-LOCAL.csv
-- MQTT_vulnerabilities_categorized-VULNERS-GEMINI.csv
-- MQTT_vulnerabilities_categorized-VULNERS-DEEPSEEK.csv
-- MQTT_vulnerabilities_categorized-NVD-DEEPSEEK.csv
+- openai40mini_dataset/dataset_categorized-GPT4-API.csv
+- openai40mini_dataset/\*.csv
 
-DDS Vulnerabilities:
+LLaMA 4 Vulnerabilities:
 
-- DDS_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-- DDS_vulnerabilities_categorized-NVD-GEMINI-API.csv
+- llama4_dataset/dataset_categorized-LLaMA4-API.csv
+- llama4_dataset/\*.csv
 
-UAV Vulnerabilities:
+Sem categorização Vulnerabilities:
 
-- UAV_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
-- UAV_vulnerabilities_categorized-GEMINI-API.csv
+- dataset/dataset_NO-CATEGORIZED.csv
+- dataset/\*.csv
 
 **Como Executar a Análise**
 
@@ -390,32 +555,48 @@ Passo 1: Preparar o Ambiente
 
 Passo 2: Executar o Script
 
-Use o seguinte comando para executar o script para os datasets gerados:
+Use o seguinte comando para executar o script para os datasets gerados, como por exemplo:
 
-**Datasets DDS**
+**Datasets Categorizados com Gemini 2.0 Flash**
+
+- Gerar análise comparativa entre o dataset baseline da fonte nvd sem categorização com o dataset categorizado.
 
 ```bash
-python analysis.py google_dataset/DDS_vulnerabilities_categorized-NVD-GEMINI-API.csv Llama4_dataset/DDS_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
+python analysis.py --baseline dataset/dataset_NO-CATEGORIZED.csv --categorizado gemini2flash_dataset/dataset_categorized-GEMINI-API.csv
 ```
 
-**Datasets UAV**
+- Gerar análise temporal, gráficos de distribuição de severidade, entre outras análises.
 
 ```bash
-python analysis.py google_dataset/UAV_vulnerabilities_categorized-GEMINI-API.csv Llama4_dataset/UAV_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv
+python analysis.py gemini2flash_dataset/dataset_categorized-GEMINI-API.csv
 ```
 
-**Datasets MQTT**
+**Datasets Categorizados com GPT-4o mini**
+
+- Gerar análise comparativa entre o dataset baseline da fonte nvd sem categorização com o dataset categorizado.
 
 ```bash
-python analysis.py google_dataset/MQTT_vulnerabilities_categorized-NVD-GEMINI-API.csv google_dataset/MQTT_vulnerabilities_categorized-VULNERS-GEMINI-API.csv
+python analysis.py --baseline dataset/dataset_NO-CATEGORIZED.csv --categorizado openai40mini_dataset/dataset_categorized-GPT4-API.csv
 ```
 
-```bash
-python analysis.py Llama4_dataset/MQTT_vulnerabilities_categorized-NVD-Llama4-LOCAL.csv Llama4_dataset/MQTT_vulnerabilities_categorized-VULNERS-Llama4-LOCAL.csv
-```
+- Gerar análise temporal, gráficos de distribuição de severidade, entre outras análises.
 
 ```bash
-python analysis.py deekseek_dataset/MQTT_vulnerabilities_categorized-NVD-DEEPSEEK.csv deekseek_dataset/MQTT_vulnerabilities_categorized-VULNERS-DEEPSEEK.csv
+python analysis.py openai40mini_dataset/dataset_categorized-GPT4-API.csv
+```
+
+**Datasets Categorizados com LLaMA 4**
+
+- Gerar análise comparativa entre o dataset baseline da fonte nvd sem categorização com o dataset categorizado.
+
+```bash
+python analysis.py --baseline dataset/dataset_NO-CATEGORIZED.csv --categorizado llama4_dataset/dataset_categorized-LLaMA4-API.csv
+```
+
+- Gerar análise temporal, gráficos de distribuição de severidade, entre outras análises.
+
+```bash
+python analysis.py llama4_dataset/dataset_categorized-LLaMA4-API.csv
 ```
 
 **Resultados**
@@ -438,9 +619,9 @@ python analysis.py deekseek_dataset/MQTT_vulnerabilities_categorized-NVD-DEEPSEE
 **Observações Gerais (para todos os estudos de caso):**
 
 - **Reprodutibilidade:** Os resultados _exatos_ podem variar um pouco devido a:
-  - **Atualizações nas bases de dados:** O NVD e o Vulners são constantemente atualizados. Novas vulnerabilidades podem ser adicionadas, e as informações sobre vulnerabilidades existentes podem ser modificadas.
-  - **Estocasticidade dos LLMs:** Os LLMs (Gemini, Llama, DeepSeek ou outros) não são completamente determinísticos\*. Pequenas variações nas respostas são esperadas, mesmo com o mesmo prompt e os mesmos dados de entrada.
-- **Tempo de Execução:** A coleta de dados, especialmente do Vulners, e a categorização com os LLMs _podem levar um tempo considerável_ (dependendo do número de termos de busca, da quantidade de vulnerabilidades encontradas e da velocidade da sua conexão com a internet e das APIs). Principalmente para rodar modelos locais, como Llama4 (DeepHermes-3-Llama-3-8B-Preview3)
+  - **Atualizações nas bases de dados:** As fontes de dados NVD, CIRCL, CISA e Vulners são constantemente atualizados. Novas vulnerabilidades podem ser adicionadas, e as informações sobre vulnerabilidades existentes podem ser modificadas.
+  - **Estocasticidade dos LLMs:** Os LLMs (Gemini, Llama, GPT) não são completamente determinísticos\*. Pequenas variações nas respostas são esperadas, mesmo com o mesmo prompt e os mesmos dados de entrada.
+- **Tempo de Execução:** A coleta de dados, especialmente do Vulners, e a categorização com os LLMs _podem levar um tempo considerável_ (dependendo do número de termos de busca, da quantidade de vulnerabilidades encontradas e da velocidade da sua conexão com a internet e das APIs).
 - **Erros/Exceções:**
 - O código fornecido tem _algum_ tratamento de erros (e.g., `try...except` para chamadas de API), mas _não é exaustivo_. É _possível_ que ocorram erros durante a execução (e.g., problemas de conexão, limites de taxa de API, etc.).
 - Se ocorrerem erros, _leia atentamente as mensagens de erro_. Elas podem fornecer pistas sobre o problema.
