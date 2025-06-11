@@ -4,7 +4,7 @@
 
 **Resumo do Artigo:**
 
-_A obtenção e geração de datasets significativos e representativos permanece um desafio considerável no domínio da Cibersegurança. Neste trabalho, nós apresentamos uma solução automatizada para a geração e atualização contínua de datasets de vulnerabilidades extraídas de múltiplas fontes, como NVD, CISA e CIRCL. Utilizando diferentes LLMs, conseguimos aprimorar a categorização das vulnerabilidades e enriquecer semanticamente a identificação das categorias CWE. Para demonstrar o funcionamento e o potencial da nossa solução, geramos um conjunto inicial de 8 datasets distintos._
+_A obtenção e geração de conjuntos de dados representativos permanece um desafio no domínio da Cibersegurança. Neste trabalho, apresentamos uma solução automatizada para a geração de conjuntos de dados de vulnerabilidades, que coletamos de múltiplas fontes, como NVD, CISA, CIRCL e Vulners. Utilizando diferentes LLMs (e.g., GPT, Gemini, LLaMA), aprimoramos a categorização das vulnerabilidades e enriquecemos semanticamente a identificação das categorias CWE. Para demonstrar o funcionamento e o potencial da solução proposta, geramos um conjunto de 8 datasets distintos, voltados para tecnologias específicas (e.g., Apache, QUIC, OpenSSL, NGINX, Kubernetes, MQTT, Zigbee e CoAP)._
 
 ---
 
