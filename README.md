@@ -173,14 +173,14 @@ CMD ["python", "src/main.py"]
     _(Este exemplo assume que o modelo Llama4 e a configuração estão dentro da imagem ou acessíveis. Para modelos locais grandes ou para usar um `config.yaml` externo, pode ser necessário montar volumes (`-v`).)_
 
     ````bash
-    python src/main.py --provider <provider> --data-source nvd --export-format csv --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"```
+    python src/main.py --provider 'gemini2flash' --data-source nvd --export-format csv --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"```
 
     ````
 
 3.  **Executar o container sem usar IA para categorização:**
 
     ```bash
-    python src/main.py --provider none --data-source nvd --export-format 'csv' --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"
+    python src/main.py --provider 'none' --data-source 'nvd' --export-format 'csv' --output-file 'vulnerabilidades.csv' --search-params "OpenDDS"
     ```
 
 ## Configuração
@@ -222,7 +222,7 @@ python src/main.py --provider <ai_provider> --data-source <data_source> --export
 1.  **Usando Google Gemini 1.5 Pro para categorização, com a fonte de dados NVD e múltiplos termos de busca:**
 
     ```bash
-    python src/main.py --provider 'google' --data-source 'nvd' --search-params "OpenDDS" "RTI Connext DDS" --export-format csv --output-file vulnerabilidades.csv
+    python src/main.py --provider 'gemini2flash' --data-source 'nvd' --search-params "OpenDDS" "RTI Connext DDS" --export-format csv --output-file vulnerabilidades.csv
     ```
 
     - `--provider`: Usa Gemini, ChatGPT, Llama ou outros.
@@ -250,7 +250,7 @@ python src/main.py --provider <ai_provider> --data-source <data_source> --export
     Execute:
 
     ```bash
-    python src/main.py --provider 'gemini' --data-source 'vulners' --search-file search_terms.txt --output-file vulnerabilidades_gemini.csv
+    python src/main.py --provider 'gemini2flash' --data-source 'vulners' --search-file search_terms.txt --output-file vulnerabilidades_gemini.csv
     ```
 
 ## Experimentos
