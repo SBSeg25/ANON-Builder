@@ -277,7 +277,7 @@ Ao copiar e colar as chaves de API (por exemplo, do Apêndice do artigo ou de ou
 **Pré-requisitos:**
 
 1.  Instalação completa e ambiente virtual ativado.
-2.  Arquivo `src/config.yaml` criado e preenchido com as chaves de API **corretas** (Vulners, Gemini, DeepSeek, HuggingFace). **Verifique os underscores!**
+2.  Arquivo `src/config.yaml` criado e preenchido com as chaves de API **corretas** (Vulners, Gemini, Llama,ChatGPT, HuggingFace). **Verifique os underscores!**
 3.  Os arquivos com termos de busca estão disponíveis no diretório `search_files/`.
 
 **Execução por Reivindicação (Claim):**
