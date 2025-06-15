@@ -79,7 +79,7 @@ Este README.md está organizado nas seguintes seções:
   - **HugginFace:** Obtenha uma chave em [https://huggingface.co](https://huggingface.co/)
   - **Google Gemini:** Obtenha uma chave em [https://ai.google.dev/](https://ai.google.dev/)
   - **OpenAI ChatGPT:** Obtenha uma chave em [https://platform.openai.com/](https://platform.openai.com/)
-  - **Llama (Meta):** Obtenha uma chave em [https://llama-api.com/](https://llama-api.com/)
+  - **Llama (Meta):** Obtenha uma chave em [https://groq.com/](https://groq.com/)
 
 ## Requisitos
 
